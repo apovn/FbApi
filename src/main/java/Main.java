@@ -21,24 +21,19 @@ public class Main {
         // create a version 2.6 client
         FacebookClient facebookClient = new DefaultFacebookClient(pageAccessToken, Version.VERSION_2_6);
 
-        getBasicInfo(facebookClient); // OK
+//        getBasicInfo(facebookClient); // OK
 
 //        getFeedOfPage(facebookClient);  // OK
 
-//        sendPrivateMsg(facebookClient);   // OK
+        sendPrivateMsg(facebookClient);
 
     }
 
     private static void sendPrivateMsg(FacebookClient facebookClient) {
-        IdMessageRecipient recipient = new IdMessageRecipient("10202989806958658");
 
-        Message simpleTextMessage = new Message("Just a simple text");
-        MediaAttachment image =
-                new MediaAttachment(MediaAttachment.Type.IMAGE, "http://example.com/testimage.jpg");
-        Message imageMessage = new Message(image);
+        String simpleTextMessage = new String("Just a simple text");
 
         facebookClient.publish("t_1008785457/messages", GraphResponse.class,
-                Parameter.with("recipient", recipient),
                 Parameter.with("message", simpleTextMessage));
     }
 
