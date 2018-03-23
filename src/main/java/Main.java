@@ -3,9 +3,6 @@ import com.restfb.types.GraphResponse;
 import com.restfb.types.Page;
 import com.restfb.types.Post;
 import com.restfb.types.User;
-import com.restfb.types.send.IdMessageRecipient;
-import com.restfb.types.send.MediaAttachment;
-import com.restfb.types.send.Message;
 
 import java.util.Iterator;
 import java.util.List;
@@ -14,27 +11,43 @@ import java.util.List;
  * Created by tri.tran on 3/21/2018.
  */
 public class Main {
+
+    // the access token can be found in your Facebook app in the messenger section
+    final static String PAGE_ACCESS_TOKEN = "...";
+    final static String MY_APP_ID = "...";
+    final static String MY_APP_SECRET = "...";
+
+
     public static void main(String[] args) {
-        // the access token can be found in your Facebook app in the messenger section
-        String pageAccessToken = "...";
 
         // create a version 2.6 client
-        FacebookClient facebookClient = new DefaultFacebookClient(pageAccessToken, Version.VERSION_2_6);
+        FacebookClient facebookClient = new DefaultFacebookClient(PAGE_ACCESS_TOKEN, Version.VERSION_2_6);
 
 //        getBasicInfo(facebookClient); // OK
 
 //        getFeedOfPage(facebookClient);  // OK
 
-        sendPrivateMsg(facebookClient);
+//        addNewMsgToConversation(facebookClient);  // OK
+
+//        getExtendAccessToken(); // OK
 
     }
 
-    private static void sendPrivateMsg(FacebookClient facebookClient) {
+
+    private static void getExtendAccessToken() {
+        FacebookClient.AccessToken accessToken = new DefaultFacebookClient().obtainExtendedAccessToken(MY_APP_ID, MY_APP_SECRET, PAGE_ACCESS_TOKEN);
+        System.out.println("My extended access token: " + accessToken);
+    }
+
+    private static void addNewMsgToConversation(FacebookClient facebookClient) {
+        Connection<Post> myFeed = facebookClient.fetchConnection("me/conversations", Post.class);
+        List<Post> list = myFeed.getData();
+        for (Post post : list) {
+            System.out.println("Get Post Id: " + post.getId());
+        }
 
         String simpleTextMessage = new String("Just a simple text");
-
-        facebookClient.publish("t_1008785457/messages", GraphResponse.class,
-                Parameter.with("message", simpleTextMessage));
+        facebookClient.publish("t_1008785457/messages", GraphResponse.class, Parameter.with("message", simpleTextMessage));
     }
 
     /*
